@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 902 282" width="902" height="282">
+  <title>alora</title>
+  <g fill="#3038d5" transform="translate(141 141)">
+    <rect x="-38" y="-140" width="76" height="280" rx="38"/>
+    <rect x="-38" y="-140" width="76" height="280" rx="38" transform="rotate(45)"/>
+    <rect x="-38" y="-140" width="76" height="280" rx="38" transform="rotate(90)"/>
+    <rect x="-38" y="-140" width="76" height="280" rx="38" transform="rotate(135)"/>
+  </g>
+  <g fill="#000066" fill-rule="evenodd" transform="translate(64 -543)">
+    <path id="a" d="M251 653c19-10 42-15 64-15 38 0 60 18 60 51v89h-42v-8c-11 7-24 10-38 10-29 0-50-17-50-42 0-26 22-42 56-42 11 0 22 1 32 4v-7c0-14-9-20-26-20-13 0-27 4-42 11zm82 74c-8-2-15-4-25-4-14 0-23 5-23 14 0 8 9 14 23 14 10 0 18-2 25-6z"/>
+    <path d="m393 596 42-6v188h-42z"/>
+    <path d="M522 638c42 0 75 31 75 71s-33 71-75 71-74-31-74-71 32-71 74-71zm0 36c-19 0-33 15-33 35s14 35 33 35 34-15 34-35-15-35-34-35z"/>
+    <path d="M610 640h42v14c10-11 23-17 37-17 6 0 11 1 15 3v37c-6-3-13-4-20-4-13 0-24 6-32 18v87h-42z"/>
+    <use href="#a" transform="translate(462 0)"/>
+  </g>
+</svg>
