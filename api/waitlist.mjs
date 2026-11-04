@@ -1,21 +1,42 @@
 import {register} from '../lib/waitlist.mjs';
 
-export function POST(request) {
-  return register(request, async (email, name, area, whatsapp, consentVersion) => {
-    const url = process.env.ALORA_SHEETS_URL;
-    const secret = process.env.ALORA_SHEETS_SECRET;
-    if (!url || !secret || !/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(url)) {
-      throw new Error('Google Sheets is not configured');
-    }
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({secret, email, name, area, whatsapp, consentVersion}),
-      signal: AbortSignal.timeout(9000)
-    });
-    if (!response.ok || (await response.json()).saved !== true) {
-      throw new Error('Google Sheets did not confirm the write');
-    }
-  });
+function fail(reason, status) {
+  console.error('[alora-sheets]', reason, ...(status ? [status] : []));
+  throw new Error(reason);
 }
 
+export function POST(request) {
+  return register(request, async (email, name, area, whatsapp, consentVersion) => {
+    const url = process.env.ALORA_SHEETS_URL?.trim();
+    const secret = process.env.ALORA_SHEETS_SECRET?.trim();
+    if (!url) fail('missing_url');
+    if (!secret) fail('missing_secret');
+    if (!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(url)) {
+      fail('invalid_web_app_url');
+    }
+
+    let response;
+    try {
+      response = await fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({secret, email, name, area, whatsapp, consentVersion}),
+        signal: AbortSignal.timeout(9000)
+      });
+    } catch (error) {
+      fail(error.name === 'TimeoutError' ? 'google_timeout' : 'google_connection_failed');
+    }
+
+    if (!response.ok) fail('google_http_error', response.status);
+    if (!response.headers.get('content-type')?.includes('application/json')) {
+      fail('google_returned_non_json');
+    }
+    let result;
+    try {
+      result = await response.json();
+    } catch {
+      fail('google_returned_invalid_json');
+    }
+    if (result?.saved !== true) fail('google_write_not_confirmed');
+  });
+}
