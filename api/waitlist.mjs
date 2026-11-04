@@ -7,9 +7,9 @@ function fail(reason, status) {
 
 export function POST(request) {
   return register(request, async (email, name, area, whatsapp, consentVersion) => {
-    const url = process.env.ALORA_SHEETS_URL?.trim();
+    const url = 'https://script.google.com/macros/s/AKfycby3sxW6a9zcf2MVljYTbUDgtVaaOJO4QWY3pHGisyE13h3NFSKCww6xyzotnN-xQi0iBw/exec';
     const secret = process.env.ALORA_SHEETS_SECRET?.trim();
-    if (!url) fail('missing_url');
+
     if (!secret) fail('missing_secret');
     if (!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(url)) {
       fail('invalid_web_app_url');
